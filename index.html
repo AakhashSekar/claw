@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet Map with Mapbox Satellite and GeoJSON</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <!-- Mapbox CSS -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet" />
+
+    <!-- Mapbox JavaScript -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+</head>
+<body>
+
+    <div id="map" style="height: 400px;"></div>
+
+    <script>
+        function initMap() {
+            // Replace 'yourfile.geojson' with the actual local path of your GeoJSON file
+            var geoJsonUrl = 'https://raw.githubusercontent.com/AakhashSekar/claw/main/RDR%20to%20RSK.geojson';  
+
+            var map = L.map('map').setView([30.2936, 78.9790], 10);
+
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                attribution: '© Mapbox',
+                id: 'mapbox/satellite-v9',
+                accessToken: 'sk.eyJ1IjoiYmFza2FyYW5wcmFoYXJzaGEiLCJhIjoiY2xyNHdzc3pkMWR6bDJqbnZtbmI1dWVwOCJ9.RX_5WYf_6U0Ai96ck95ihA'
+            }).addTo(map);
+
+            // Load GeoJSON from the specified local file
+            fetch(geoJsonUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // Customize the vector layer appearance
+                    L.geoJSON(data, {
+                        style: {
+                            color: 'red',  // Set the color to red
+                            weight: 5  // Set the weight to make the vector thicker
+                        }
+                    }).addTo(map);
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initMap();
+        });
+    </script>
+</body>
+</html>
